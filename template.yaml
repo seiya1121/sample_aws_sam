@@ -5,9 +5,9 @@ Resources:
   GetAverageFunction: #任意の処理名
     Type: AWS::Serverless::Function
     Properties:
-      Handler: index.averages
+      Handler: index.resources
       Runtime: nodejs6.10
-      Policies: AmasonDynamoDBFullAccess
+      Policies: AmasonDynamoDBReadOnlyAccess
       Environment:
         Variables:
           TABLE_NAME: !Ref Table
@@ -15,42 +15,12 @@ Resources:
         GetResource:
           Type: Api
           Properties:
-            Path: /averages
-            Method: get
-  GetScoresFunction: #任意の処理名
-    Type: AWS::Serverless::Function
-    Properties:
-      Handler: index.scores
-      Runtime: nodejs6.10
-      Policies: AmazonDynamoDBReadOnlyAccess
-      Environment:
-        Variables:
-          TABLE_NAME: !Ref Table
-      Events:
-        GetResource:
-          Type: Api
-          Properties:
-            Path: /averages/{id}/scores
-            Method: get
-  GetCompaniesFunction: #任意の処理名
-    Type: AWS::Serverless::Function
-    Properties:
-      Handler: index.companies
-      Runtime: nodejs6.10
-      Policies: AmazonDynamoDBReadOnlyAccess
-      Environment:
-        Variables:
-          TABLE_NAME: !Ref Table
-      Events:
-        GetResource:
-          Type: Api
-          Properties:
-            Path: /averages/{id}/companies
+            Path: /resources
             Method: get
   PutAverageFunction: #任意の処理名
     Type: AWS::Serverless::Function
     Properties:
-      Handler: index.putAverage
+      Handler: index.putResource
       Runtime: nodejs6.10
       Policies: AmazonDynamoDBFullAccess
       Environment:
@@ -60,7 +30,7 @@ Resources:
         GetResource:
           Type: Api
           Properties:
-            Path: /averages/{id}
+            Path: /resources/{id}
             Method: put
 Table:
   Type: AWS::Serverless::SimpleTable
