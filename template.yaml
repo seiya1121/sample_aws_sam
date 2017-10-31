@@ -1,0 +1,66 @@
+AWSTemplataFormatVersion: '2010-09-09'
+Transform: AWS::Serverless-2016-10-31
+Description: Simple CRUD Web service. State is stored in DynamoDB table.
+Resources:
+  GetAverageFunction: #任意の処理名
+    Type: AWS::Serverless::Function
+    Properties:
+      Handler: index.averages
+      Runtime: nodejs6.10
+      Policies: AmasonDynamoDBFullAccess
+      Environment:
+        Variables:
+          TABLE_NAME: !Ref Table
+      Events: #index.getのトリガー
+        GetResource:
+          Type: Api
+          Properties:
+            Path: /averages
+            Method: get
+  GetScoresFunction: #任意の処理名
+    Type: AWS::Serverless::Function
+    Properties:
+      Handler: index.scores
+      Runtime: nodejs6.10
+      Policies: AmazonDynamoDBReadOnlyAccess
+      Environment:
+        Variables:
+          TABLE_NAME: !Ref Table
+      Events:
+        GetResource:
+          Type: Api
+          Properties:
+            Path: /averages/{id}/scores
+            Method: get
+  GetCompaniesFunction: #任意の処理名
+    Type: AWS::Serverless::Function
+    Properties:
+      Handler: index.companies
+      Runtime: nodejs6.10
+      Policies: AmazonDynamoDBReadOnlyAccess
+      Environment:
+        Variables:
+          TABLE_NAME: !Ref Table
+      Events:
+        GetResource:
+          Type: Api
+          Properties:
+            Path: /averages/{id}/companies
+            Method: get
+  PutAverageFunction: #任意の処理名
+    Type: AWS::Serverless::Function
+    Properties:
+      Handler: index.putAverage
+      Runtime: nodejs6.10
+      Policies: AmazonDynamoDBFullAccess
+      Environment:
+        Variables:
+          TABLE_NAME: !Ref Table
+      Events:
+        GetResource:
+          Type: Api
+          Properties:
+            Path: /averages/{id}
+            Method: put
+Table:
+  Type: AWS::Serverless::SimpleTable
